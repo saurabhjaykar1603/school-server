@@ -21,7 +21,7 @@ app.get("/students", (req, res) => {
 // Define a POST request route at "/students" to add a new student
 app.post("/students", (req, res) => {
   // Extract student data from the request body
-  const { name, email, mobile, gmail, age } = req.body;
+  const { name, email, mobile, age } = req.body;
 
   // Generate a random ID for the new student
   const id = Math.floor(Math.random() * 10000);
@@ -32,9 +32,40 @@ app.post("/students", (req, res) => {
     name,
     email,
     mobile,
-    gmail,
     age,
   };
+
+  if (!name) {
+    // Check if the "name" field is missing in the request body
+    res.json({
+      success: false,
+      message: "name is required",
+    });
+  }
+
+  if (!age) {
+    // Check if the "age" field is missing in the request body
+    res.json({
+      success: false,
+      message: "age is required",
+    });
+  }
+
+  if (!mobile) {
+    // Check if the "mobile" field is missing in the request body
+    res.json({
+      success: false,
+      message: "mobile is required",
+    });
+  }
+
+  if (!email) {
+    // Check if the "email" field is missing in the request body
+    res.json({
+      success: false,
+      message: "email is required",
+    });
+  }
 
   // Add the new student to the "students" array
   students.push(newStudent);
