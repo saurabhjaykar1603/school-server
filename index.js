@@ -93,6 +93,14 @@ app.get("/student", (req, res) => {
     }
   });
 
+  // If no student is found (student is still null), respond with a failure message
+  if (student == null) {
+    return res.json({
+      success: false,
+      message: "Student not found",
+    });
+  }
+
   // Respond with a JSON object indicating the success of the operation,
   // the data of the fetched student, and a success message
   res.json({
@@ -100,14 +108,6 @@ app.get("/student", (req, res) => {
     data: student,
     message: "Student fetched successfully",
   });
-
-  // If no student is found (student is still null), respond with a failure message
-  if (student == null) {
-    res.json({
-      success: false,
-      message: "Student not found",
-    });
-  }
 });
 
 // Define a "health" endpoint at "/health" to check the server's status
