@@ -78,21 +78,30 @@ app.post("/students", (req, res) => {
   });
 });
 
+// Define a GET request route at "/student" to fetch a student by ID from the query parameters
 app.get("/student", (req, res) => {
+  // Extract the "id" from the request query
   const { id } = req.query;
+
+  // Initialize a variable "student" with a null value
   let student = null;
+
+  // Iterate through the "students" array to find a student with a matching ID
   students.forEach((stud) => {
     if (stud.id == id) {
       student = stud;
     }
   });
 
+  // Respond with a JSON object indicating the success of the operation,
+  // the data of the fetched student, and a success message
   res.json({
     success: true,
     data: student,
     message: "Student fetched successfully",
   });
 
+  // If no student is found (student is still null), respond with a failure message
   if (student == null) {
     res.json({
       success: false,
