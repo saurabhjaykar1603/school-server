@@ -1,9 +1,24 @@
 // Import the Express library
 import express from "express";
+import mongoose from "mongoose";
+import dotenv from "dotenv";
+dotenv.config()
+
 
 // Create an instance of the Express application
 const app = express();
 app.use(express.json());
+
+//  DATA BASE CONNECTION
+const MONGODB_URI = process.env.MONGODB_URI;
+
+const connectMongoDB = async () => {
+  const conn = await mongoose.connect(MONGODB_URI);
+  if (conn) {
+    console.log("mongodb connect succeeded");
+  }
+};
+connectMongoDB();
 
 // Initialize an empty array to store student data
 const students = [];
