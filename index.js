@@ -31,16 +31,33 @@ const studentSchema = new Schema({
 
 const Student = model("Student", studentSchema);
 
-// Initialize an empty array to store student data
-const students = [];
 
-// Define a GET request route at "/students" to read all students from the array
-app.get("/students", (req, res) => {
-  // Respond with a JSON object containing the list of students and a success message
+app.get("/students", async (req, res) => {
+  const students = await Student.find();
   res.json({
     success: true,
     students: students,
     message: "read all students from the array successfully",
+  });
+});app.get("/student", async (req, res) => {
+  // Extract the "id" from the request query
+  const { email } = req.query;
+  const studentEmail = await Student.findOne({ email: email });
+
+  // If no student is found (student is still null), respond with a failure message
+  if (studentEmail == null) {
+    return res.json({
+      success: false,
+      message: "Student not found",
+    });
+  }
+
+  // Respond with a JSON object indicating the success of the operation,
+  // the data of the fetched student, and a success message
+  res.json({
+    success: true,
+    data: studentEmail,
+    message: "Student fetched successfully",
   });
 });
 
