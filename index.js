@@ -1,9 +1,8 @@
 // Import the Express library
 import express from "express";
-import mongoose from "mongoose";
+import mongoose, { model, Schema } from "mongoose";
 import dotenv from "dotenv";
-dotenv.config()
-
+dotenv.config();
 
 // Create an instance of the Express application
 const app = express();
@@ -20,6 +19,18 @@ const connectMongoDB = async () => {
 };
 connectMongoDB();
 
+// Schema design
+const studentSchema = new Schema({
+  name: String,
+  age: Number,
+  email: String,
+  mobile: String,
+});
+
+// model
+
+const Student = model("Student", studentSchema);
+
 // Initialize an empty array to store student data
 const students = [];
 
@@ -34,61 +45,21 @@ app.get("/students", (req, res) => {
 });
 
 // Define a POST request route at "/students" to add a new student
-app.post("/students", (req, res) => {
-  // Extract student data from the request body
-  const { name, email, mobile, age } = req.body;
+app.post("/students", async (req, res) => {
+  const { name, email, age, mobile } = req.body;
+  const newStudent = new Student({
+    name: name,
+    age: age,
+    mobile: mobile,
+    email: email,
+  });
 
-  // Generate a random ID for the new student
-  const id = Math.floor(Math.random() * 10000);
-
-  // Create a new student object
-  const newStudent = {
-    id,
-    name,
-    email,
-    mobile,
-    age,
-  };
-
-  if (!name) {
-    // Check if the "name" field is missing in the request body
-    res.json({
-      success: false,
-      message: "name is required",
-    });
-  }
-
-  if (!age) {
-    // Check if the "age" field is missing in the request body
-    res.json({
-      success: false,
-      message: "age is required",
-    });
-  }
-
-  if (!mobile) {
-    // Check if the "mobile" field is missing in the request body
-    res.json({
-      success: false,
-      message: "mobile is required",
-    });
-  }
-
-  if (!email) {
-    // Check if the "email" field is missing in the request body
-    res.json({
-      success: false,
-      message: "email is required",
-    });
-  }
-
-  // Add the new student to the "students" array
-  students.push(newStudent);
+  const saveStudent = await newStudent.save();
 
   // Respond with a JSON object indicating success and the updated list of students
   res.json({
     success: true,
-    students: students,
+    students: saveStudent,
     message: "student successfully added",
   });
 });
