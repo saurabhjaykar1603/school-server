@@ -31,7 +31,6 @@ const studentSchema = new Schema({
 
 const Student = model("Student", studentSchema);
 
-
 app.get("/students", async (req, res) => {
   const students = await Student.find();
   res.json({
@@ -39,7 +38,8 @@ app.get("/students", async (req, res) => {
     students: students,
     message: "read all students from the array successfully",
   });
-});app.get("/student", async (req, res) => {
+});
+app.get("/student", async (req, res) => {
   // Extract the "id" from the request query
   const { email } = req.query;
   const studentEmail = await Student.findOne({ email: email });
@@ -78,38 +78,6 @@ app.post("/students", async (req, res) => {
     success: true,
     students: saveStudent,
     message: "student successfully added",
-  });
-});
-
-// Define a GET request route at "/student" to fetch a student by ID from the query parameters
-app.get("/student", (req, res) => {
-  // Extract the "id" from the request query
-  const { id } = req.query;
-
-  // Initialize a variable "student" with a null value
-  let student = null;
-
-  // Iterate through the "students" array to find a student with a matching ID
-  students.forEach((stud) => {
-    if (stud.id == id) {
-      student = stud;
-    }
-  });
-
-  // If no student is found (student is still null), respond with a failure message
-  if (student == null) {
-    return res.json({
-      success: false,
-      message: "Student not found",
-    });
-  }
-
-  // Respond with a JSON object indicating the success of the operation,
-  // the data of the fetched student, and a success message
-  res.json({
-    success: true,
-    data: student,
-    message: "Student fetched successfully",
   });
 });
 
