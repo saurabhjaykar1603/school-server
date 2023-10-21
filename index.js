@@ -89,7 +89,7 @@ app.delete("/student/:_id", async (req, res) => {
     message: `Student deleted successfully ${_id}`,
   });
 });
-  
+
 //put student   into the database and send it to the server with the student information it change whole feild
 app.put("/student/:_id", async (req, res) => {
   const { _id } = req.params;
@@ -97,7 +97,36 @@ app.put("/student/:_id", async (req, res) => {
   await Student.updateOne(
     { _id: _id },
     { $set: { email: email, name: name, age: age, mobile: mobile } }
-  );``
+  );
+  if (!name) {
+    // Check if the "name" field is missing in the request body
+    res.json({
+      success: false,
+      message: "name is required",
+    });
+  }
+
+  if (!email) {
+    res.json({
+      success: false,
+      message: "email is required",
+    });
+  }
+
+  if (!age) {
+    res.json({
+      success: false,
+      message: "age is required",
+    });
+  }
+
+  if (!mobile) {
+    res.json({
+      success: false,
+      message: "mobile is required",
+    });
+  }
+
   const updateSave = await Student.findOne({ _id: _id });
   res.json({
     success: true,
