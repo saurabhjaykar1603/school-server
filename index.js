@@ -135,6 +135,31 @@ app.put("/student/:_id", async (req, res) => {
   });
 });
 
+app.patch("/student/:_id", async (req, res) => {
+  const { _id } = req.params;
+  const { email, age, mobile, name } = req.body;
+  const student = await Student.findById(_id);
+
+  if (email) {
+    student.email = email;
+  }
+  if (name) {
+    student.name = name;
+  }
+  if (mobile) {
+    student.mobile = mobile;
+  }
+  if (age) {
+    student.age = age;
+  }
+  const updateStudentSave = await student.save();
+  res.json({
+    success: true,
+    data: updateStudentSave,
+    message: " Student Updated successfully",
+  });
+});
+
 // Set the port number for the server to listen on
 const PORT = 1000;
 
