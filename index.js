@@ -1,7 +1,8 @@
 // Import the Express library
 import express from "express";
-import mongoose, { model, Schema } from "mongoose";
+import mongoose from "mongoose";
 import dotenv from "dotenv";
+import Student from "./src/models/student.js";
 dotenv.config();
 
 // Create an instance of the Express application
@@ -18,18 +19,6 @@ const connectMongoDB = async () => {
   }
 };
 connectMongoDB();
-
-// Schema design
-const studentSchema = new Schema({
-  name: String,
-  age: Number,
-  email: String,
-  mobile: String,
-});
-
-// model
-
-const Student = model("Student", studentSchema);
 
 app.get("/students", async (req, res) => {
   const students = await Student.find();
@@ -87,6 +76,17 @@ app.get("/health", (req, res) => {
   res.json({
     success: true,
     message: "All set done",
+  });
+});
+
+// delete student rq
+app.delete("/student/:_id", async (req, res) => {
+  const { _id } = req.params;
+  await Student.deleteOne({ _id: _id });
+  res.json({
+    success: true,
+    data: {},
+    message: `Student deleted successfully ${_id}`,
   });
 });
 
