@@ -25,7 +25,7 @@ app.get("/students", async (req, res) => {
   res.json({
     success: true,
     students: students,
-    message: "read all students from the array successfully",
+    message: "read all students from the array successfully .",
   });
 });
 app.get("/student", async (req, res) => {
@@ -46,7 +46,7 @@ app.get("/student", async (req, res) => {
   res.json({
     success: true,
     data: studentEmail,
-    message: "Student fetched successfully",
+    message: "Student fetched successfully ",
   });
 });
 
@@ -89,9 +89,25 @@ app.delete("/student/:_id", async (req, res) => {
     message: `Student deleted successfully ${_id}`,
   });
 });
+  
+//put student   into the database and send it to the server with the student information it change whole feild
+app.put("/student/:_id", async (req, res) => {
+  const { _id } = req.params;
+  const { name, email, age, mobile } = req.body;
+  await Student.updateOne(
+    { _id: _id },
+    { $set: { email: email, name: name, age: age, mobile: mobile } }
+  );``
+  const updateSave = await Student.findOne({ _id: _id });
+  res.json({
+    success: true,
+    data: updateSave,
+    message: `Student updated successfully ${_id}`,
+  });
+});
 
 // Set the port number for the server to listen on
-const PORT = 4000;
+const PORT = 1000;
 
 // Start the Express server and log a message to the console when it's running
 app.listen(PORT, () => {
